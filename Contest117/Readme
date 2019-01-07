@@ -1,0 +1,4 @@
+the "numsSameConsecDiff" can be easier by using dfs, but I just want to tran my coding ability about tree, 
+so I use a stupid tree to solve the question.
+（OK... What I said above is just the excuse that the first idea came to me is using binary tree to solve it,
+influenced by the last question...
