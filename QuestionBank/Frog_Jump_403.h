@@ -7,7 +7,7 @@ using namespace std;
 class Solution {
 public:
 	//比较好想的就是用深搜，但是，不负众望地超时了。。。
-	//但是参考了discuss的trick（专业来说是剪枝），相邻两个不能小于i+1（更准确地应该是根号i+1），就超100%了。
+	//但是参考了discuss的trick（专业来说是剪枝），相邻两个相差不能小于i+1（stones[i]<=i(i+1)/2 ），就超100%了。
 	bool canCross(vector<int>& stones) {
 		if (stones[1]!=1)
 		{
