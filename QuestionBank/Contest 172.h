@@ -118,8 +118,9 @@ public:
 class Solution4 {
 public:
 	//贪心算法，最小集合覆盖
+	//贪心不行，不是最优
 	int minTaps(int n, vector<int>& ranges) {
-		vector<bool>covered(n + 1, 0);
+		vector<bool>covered(n, 0);
 		vector<bool>used(n + 1, 0);
 		bool ok = false;
 		int water_num = 0;
@@ -132,14 +133,14 @@ public:
 				int curCoverNum = 0;
 				if (!used[i] && ranges[i]!=0)
 				{
-					for (int j = max(0, i-ranges[i]); j <= min(n,i+ranges[i]); j++)
+					for (int j = max(0, i-ranges[i]); j < min(n,i+ranges[i]); j++)
 					{
 						if (!covered[j])
 						{
 							curCoverNum++;
 						}
 					}
-					if (curCoverNum > bestCoverNum)
+					if (curCoverNum >= bestCoverNum)
 					{
 						bestTap = i;
 						bestCoverNum = curCoverNum;
@@ -151,12 +152,12 @@ public:
 				used[bestTap] = 1;
 				water_num++;
 				cout << bestTap << endl;
-				for (int j = max(0, bestTap - ranges[bestTap]); j <= min(n, bestTap + ranges[bestTap]); j++)
+				for (int j = max(0, bestTap - ranges[bestTap]); j < min(n, bestTap + ranges[bestTap]); j++)
 				{
 					covered[j] = 1;
 				}
 				ok = true;
-				for (int i = 0; i < n + 1; i++)
+				for (int i = 0; i < n; i++)
 				{
 					if (!covered[i])
 					{
@@ -172,5 +173,52 @@ public:
 		}
 		return water_num;
 		
+	}
+
+	//那是因为你不会贪，先排序，以尽可能覆盖得更远为目标
+	static bool compare(pair<int, int>a, pair<int, int>b)
+	{
+		if (a.second==b.second)
+		{
+			return a.first < b.first;
+		}
+		return a.second > b.second;
+	}
+	int minTaps2(int n, vector<int>& ranges) {
+		vector<pair<int, int>>v;
+		for (int i = 0; i < n+1; i++)
+		{
+			v.push_back(make_pair(max(0, i - ranges[i]), min(n, i + ranges[i])));
+		}
+		sort(v.begin(), v.end(), compare);
+		int i = 0;
+		int flag = n;
+		int pos = n;
+		int res = 0;
+		while (i <= n)
+		{
+			int f = 0;
+			while (i <= n && v[i].second >= flag)
+			{
+				pos = min(pos, v[i].first);
+				i++;
+				f = 1;
+			}
+			flag = pos;
+			res++;
+			if (flag==0)
+			{
+				break;
+			}
+			if (!f)
+			{
+				i++;
+			}
+		}
+		if (flag != 0)
+		{
+			return -1;
+		}
+		return res;
 	}
 };
